@@ -76,12 +76,12 @@ if use_predefined_set == "Predefined Set":
     image_folder = image_sets[selected_set] 
     question_file = question_sets[selected_set]
     answer_file = answer_sets[selected_set]
-
-    image_paths = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(('jpg', 'jpeg', 'png'))]
+    # Sort image files to ensure consistent order across environments
+    image_files = sorted([img for img in os.listdir(image_folder) if img.endswith(('jpg', 'jpeg', 'png'))])
+    image_paths = [os.path.join(image_folder, img) for img in image_files]
     images = [Image.open(img_path).convert("RGB") for img_path in image_paths]
     questions = take_questions(question_file)
     answers = take_answers(answer_file)
-
 
     st.markdown("### Result Table")
     
