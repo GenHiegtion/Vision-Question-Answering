@@ -23,15 +23,13 @@ st.divider()
 SEED = 42
 torch.manual_seed(SEED)
 
-
-def preprocess_image(img: Image.Image):
+def preprocess_image(img : Image.Image):
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
     return transform(img).unsqueeze(0)
-
 
 # Classes
 classes = {0: "no", 1: "yes"}
@@ -42,8 +40,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = load_student_model(device)
 
 st.subheader("Select predefined set or Upload and enter your own")
-use_predefined_set = st.radio(
-    "Choose an option:", ["Predefined Set", "Upload Image and Enter Question"])
+use_predefined_set = st.radio("Choose an option:", ["Predefined Set", "Upload Image and Enter Question"])
 
 image_sets = {
     "Set 5 images": "static/set5/picture5",
@@ -63,48 +60,30 @@ answer_sets = {
     "Set 15 images": "static/set15/answer15.txt"
 }
 
-image_list_files = {
-    "Set 5 images": "static/set5/images5.txt",
-    "Set 10 images": "static/set10/images10.txt",
-    "Set 15 images": "static/set15/images15.txt"
-}
-
 def take_questions(file_path):
     with open(file_path, 'r') as file:
         questions = file.readlines()
     return [question.strip() for question in questions]
-
 
 def take_answers(file_path):
     with open(file_path, 'r') as file:
         answers = file.readlines()
     return [answer.strip().lower() for answer in answers]
 
-
-def take_image_list(file_path):
-    with open(file_path, 'r') as file:
-        image_files = file.readlines()
-    return [image_file.strip() for image_file in image_files]
-
-
 if use_predefined_set == "Predefined Set":
-    selected_set = st.selectbox(
-        "Choose a predefined set:", list(image_sets.keys()))
+    selected_set = st.selectbox("Choose a predefined set:", list(image_sets.keys()))
     st.divider()
-    image_folder = image_sets[selected_set]
+    image_folder = image_sets[selected_set] 
     question_file = question_sets[selected_set]
     answer_file = answer_sets[selected_set]
-    image_list_file = image_list_files[selected_set]
 
-    # Đọc danh sách hình ảnh từ file cấu hình thay vì từ thư mục
-    image_files = take_image_list(image_list_file)
-    image_paths = [os.path.join(image_folder, img) for img in image_files]
+    image_paths = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(('jpg', 'jpeg', 'png'))]
     images = [Image.open(img_path).convert("RGB") for img_path in image_paths]
     questions = take_questions(question_file)
     answers = take_answers(answer_file)
 
     st.markdown("### Result Table")
-
+    
     for img, ques, gt_ans in zip(images, questions, answers):
         img_tensor = preprocess_image(img).to(device)
         quest_vector = tokenize(ques, 20).to(device)
@@ -154,8 +133,7 @@ if use_predefined_set == "Predefined Set":
 
 else:
     with st.form("my_form"):
-        uploaded_image = st.file_uploader(
-            "Upload Image", type=["jpg", "jpeg", "png"])
+        uploaded_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
         question = st.text_area("Enter a question about the picture:",
                                 placeholder="Enter what you want to know here and I will show you!",
                                 height=100)
