@@ -1,0 +1,10 @@
+Is this a city ?
+Is this a lake ?
+Is this a color photograph ?
+Are there any plants in this room ?
+Are there any people ?
+Is this a bus ?
+Is this a wild elephant ?
+Is this a baseball field ?
+Is this a car mirror ?
+Is this a pro game ?
