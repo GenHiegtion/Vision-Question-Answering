@@ -216,3 +216,25 @@ else:
             st.write("Hope I helped you find out what you're looking for!")
         else:
             st.warning("You are missing something, please enter full input!")
+
+st.markdown(
+    """
+    <style>
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #f1f1f1;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 14px;
+        color: #555;
+    }
+    </style>
+    <div class="footer">
+        2024-2025 PTIT | Made by <a href="https://github.com/GenHiegtion" target="_blank">Hiển</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
