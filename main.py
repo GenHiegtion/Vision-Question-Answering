@@ -6,6 +6,7 @@ import math
 from torchvision import transforms
 from model.my_tokenizer import tokenize
 from model.student_model import load_student_model
+import re
 
 st.set_page_config(
     page_title="VQA",
@@ -76,56 +77,49 @@ def take_answers(file_path):
         answers = file.readlines()
     return [answer.strip().lower() for answer in answers]
 
+def natural_key(filename):
+    return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', filename)]
 
 if use_predefined_set == "Predefined Set":
-    # Save the selected set in session state to keep track of it
     if 'previous_set' not in st.session_state:
         st.session_state.previous_set = None
     
     selected_set = st.selectbox("Choose a predefined set:", list(image_sets.keys()))
     
-    # Check if the selected set is different from the previous one
     if st.session_state.previous_set != selected_set:
-        # Reset current page to 1
         st.session_state.current_page = 1
         st.session_state.previous_set = selected_set
     
     st.divider()
     image_folder = image_sets[selected_set] 
     question_file = question_sets[selected_set]
-    
-    # Read the list of images from the folder
-    image_paths = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(('jpg', 'jpeg', 'png'))]
+
+    image_files = sorted([img for img in os.listdir(image_folder) if img.endswith(('jpg', 'jpeg', 'png'))], key=natural_key)
+    image_paths = [os.path.join(image_folder, img) for img in image_files]
     images = [Image.open(img_path).convert("RGB") for img_path in image_paths]
     questions = take_questions(question_file)
     
-    # Read answers if available
     if selected_set in answer_sets:
         answer_file = answer_sets[selected_set]
         answers = take_questions(answer_file)
     else:
         answers = [""] * len(questions)
     
-    # Calculate the number of pages based on the selected dataset
     items_per_page = 5
     total_items = len(images)
     total_pages = math.ceil(total_items / items_per_page)
     
-    # Save the current page in session state to keep track of it
     if 'current_page' not in st.session_state:
         st.session_state.current_page = 1
     
-    # View the current page number and total pages
     if total_pages > 1:
         st.markdown(f"### Result Table (Page {st.session_state.current_page} of {total_pages})")
     else:
         st.markdown("### Result Table")
     
-    # Calculate start and end index for the current page
     start_idx = (st.session_state.current_page - 1) * items_per_page
     end_idx = min(start_idx + items_per_page, total_items)
     
-    # Get data for the current page
     current_images = images[start_idx:end_idx]
     current_questions = questions[start_idx:end_idx]
     current_answers = answers[start_idx:end_idx]
@@ -177,9 +171,7 @@ if use_predefined_set == "Predefined Set":
                 </div>
                 """, unsafe_allow_html=True)
     
-    # Add navigation buttons if there are more than 1 page
     if total_pages > 1:
-        # Fucntion to change page
         def change_page(page_num):
             st.session_state.current_page = page_num
         
