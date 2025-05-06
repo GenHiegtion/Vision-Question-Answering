@@ -233,7 +233,7 @@ st.markdown(
     }
     </style>
     <div class="footer">
-        2024-2025 PTIT | Made by <a href="https://github.com/GenHiegtion" target="_blank">Hiển, Bách, Quyền</a>
+        2024-2025 PTIT | Made by <a href="https://github.com/GenHiegtion/Vision-Question-Answering" target="_blank">Hiển, Bách, Quyền</a>
     </div>
     """,
     unsafe_allow_html=True
