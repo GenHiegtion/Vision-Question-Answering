@@ -6,11 +6,6 @@ def load_bert_tokenizer():
 
 tokenizer = load_bert_tokenizer()
 
-PAD_ID = tokenizer.pad_token_id
-UNK_ID = tokenizer.unk_token_id
-CLS_ID = tokenizer.cls_token_id
-SEP_ID = tokenizer.sep_token_id
-
 def tokenize(question, max_seq_len):
     encoding = tokenizer.encode_plus(
         question,
