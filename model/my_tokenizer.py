@@ -22,9 +22,3 @@ def tokenize(question, max_seq_len):
     )
 
     return encoding['input_ids'].squeeze(0)
-
-def detokenize(sequence):
-    filtered_sequence = [idx for idx in sequence
-                        if idx != PAD_ID and idx != CLS_ID and idx != SEP_ID]
-
-    return tokenizer.decode(filtered_sequence, skip_special_tokens=True)
