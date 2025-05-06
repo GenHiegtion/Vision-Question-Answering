@@ -78,15 +78,15 @@ def take_answers(file_path):
 
 
 if use_predefined_set == "Predefined Set":
-    # Lưu trữ bộ dữ liệu đã chọn trước đó trong session_state
+    # Save the selected set in session state to keep track of it
     if 'previous_set' not in st.session_state:
         st.session_state.previous_set = None
     
     selected_set = st.selectbox("Choose a predefined set:", list(image_sets.keys()))
     
-    # Kiểm tra nếu người dùng đã chuyển sang một set khác
+    # Check if the selected set is different from the previous one
     if st.session_state.previous_set != selected_set:
-        # Reset trang về 1 khi chọn set mới
+        # Reset current page to 1
         st.session_state.current_page = 1
         st.session_state.previous_set = selected_set
     
@@ -94,38 +94,38 @@ if use_predefined_set == "Predefined Set":
     image_folder = image_sets[selected_set] 
     question_file = question_sets[selected_set]
     
-    # Đọc danh sách hình ảnh từ thư mục
+    # Read the list of images from the folder
     image_paths = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(('jpg', 'jpeg', 'png'))]
     images = [Image.open(img_path).convert("RGB") for img_path in image_paths]
     questions = take_questions(question_file)
     
-    # Đọc đáp án nếu có
+    # Read answers if available
     if selected_set in answer_sets:
         answer_file = answer_sets[selected_set]
         answers = take_questions(answer_file)
     else:
         answers = [""] * len(questions)
     
-    # Tính số trang dựa trên bộ dữ liệu được chọn
+    # Calculate the number of pages based on the selected dataset
     items_per_page = 5
     total_items = len(images)
     total_pages = math.ceil(total_items / items_per_page)
     
-    # Lưu trữ trang hiện tại trong session_state
+    # Save the current page in session state to keep track of it
     if 'current_page' not in st.session_state:
         st.session_state.current_page = 1
     
-    # Hiển thị tổng số trang nếu có nhiều hơn 1 trang
+    # View the current page number and total pages
     if total_pages > 1:
         st.markdown(f"### Result Table (Page {st.session_state.current_page} of {total_pages})")
     else:
         st.markdown("### Result Table")
     
-    # Tính chỉ số bắt đầu và kết thúc cho trang hiện tại
+    # Calculate start and end index for the current page
     start_idx = (st.session_state.current_page - 1) * items_per_page
     end_idx = min(start_idx + items_per_page, total_items)
     
-    # Lấy dữ liệu của trang hiện tại
+    # Get data for the current page
     current_images = images[start_idx:end_idx]
     current_questions = questions[start_idx:end_idx]
     current_answers = answers[start_idx:end_idx]
@@ -161,7 +161,7 @@ if use_predefined_set == "Predefined Set":
             )
 
         with col3:
-            bg_color = "#d4edda" if correct else "#f8d7da"  # xanh nhạt hoặc đỏ nhạt
+            bg_color = "#d4edda" if correct else "#f8d7da"  # light green or light red
             border_color = "#c3e6cb" if correct else "#f5c6cb"
 
             st.markdown(
@@ -177,13 +177,12 @@ if use_predefined_set == "Predefined Set":
                 </div>
                 """, unsafe_allow_html=True)
     
-    # Thêm nút điều hướng trang nếu có nhiều hơn 1 trang
+    # Add navigation buttons if there are more than 1 page
     if total_pages > 1:
-        # Hàm để thay đổi trang
+        # Fucntion to change page
         def change_page(page_num):
             st.session_state.current_page = page_num
         
-        # Hiển thị các nút phân trang sát nhau và căn giữa
         col1, col2, col3 = st.columns([1, 0.25, 1])
         with col2:
             st.write("")
