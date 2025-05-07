@@ -5,7 +5,7 @@ import torch
 import math
 from torchvision import transforms
 from model.my_tokenizer import tokenize
-from model.student_model import load_student_model
+from model.vqa_model import load_model
 import re
 
 st.set_page_config(
@@ -41,7 +41,7 @@ classes = {0: "no", 1: "yes"}
 # Load model
 n_classes = len(classes)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-model = load_student_model(device)
+model = load_model(device)
 
 st.subheader("Select predefined set or Upload and enter your own")
 use_predefined_set = st.radio(

@@ -83,7 +83,7 @@ class CNNModel(nn.Module):
 
         return x
 
-class StudentVQAModel(nn.Module):
+class VQAModel(nn.Module):
     def __init__(
         self,
         n_classes,
@@ -94,7 +94,7 @@ class StudentVQAModel(nn.Module):
         proj_dim=32,
         bidirect=False,
     ):
-        super(StudentVQAModel, self).__init__()
+        super(VQAModel, self).__init__()
         
         self.image_encoder = CNNModel(output_dim = hidden_size)
 
@@ -132,8 +132,8 @@ class StudentVQAModel(nn.Module):
 
         return x, regressor_output
     
-def load_student_model(device):
-    model = StudentVQAModel(
+def load_model(device):
+    model = VQAModel(
         n_classes=2,
         embedding_dim=32,
         n_layers=2,
