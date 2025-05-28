@@ -6,4 +6,4 @@ There are 3 versions of this model:
 - **TTCS_2**: **[Use Subword-based Tokenization](https://github.com/GenHiegtion/Vision-Question-Answering/blob/main/src/TTCS_2.ipynb)**.  
 - **TTCS_Final**: **[Apply Knowledge Distillation to try improving model ability](https://github.com/GenHiegtion/Vision-Question-Answering/blob/main/src/TTCS_Final.ipynb)**.
 
-Streamlit Demo: **[VQA Deployment](https://your-streamlit-link.streamlit.app)**.
+Streamlit Demo: **[VQA Deployment](https://visiondemo-oweijr291midfr54y.streamlit.app/)**.
