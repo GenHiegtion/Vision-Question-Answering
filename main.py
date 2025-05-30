@@ -205,14 +205,32 @@ else:
             image = Image.open(uploaded_image).convert("RGB")
             img_tensor = preprocess_image(image).to(device)
             quest_vector = tokenize(question, 20).to(device)
-
+            
             with torch.no_grad():
                 logits, _ = model(img_tensor, quest_vector.unsqueeze(0))
                 pred = torch.argmax(logits, dim=1).item()
-
+                
             st.image(image, caption="Uploaded Image", width=300)
             st.subheader(f"Question: {question}")
-            st.success("Answer: " + ("Yes" if pred == 1 else "No"))
+            
+            answer = "Yes" if pred == 1 else "No"
+            bg_color = "#d4edda" if pred == 1 else "#f8d7da"
+            border_color = "#c3e6cb" if pred == 1 else "#f5c6cb"
+            
+            st.markdown(
+                f"""
+                <div style="
+                    background-color: {bg_color};
+                    border: 1px solid {border_color};
+                    border-radius: 5px;
+                    padding: 10px;
+                    display: inline-block;
+                ">
+                    <strong>My answer is:</strong> {answer}
+                </div>
+                """, unsafe_allow_html=True
+            )
+            st.write("")
             st.write("Hope I helped you find out what you're looking for!")
         else:
             st.warning("You are missing something, please enter full input!")
@@ -233,7 +251,7 @@ st.markdown(
     }
     </style>
     <div class="footer">
-        2024-2025 PTIT | Made by <a href="https://github.com/GenHiegtion/Vision-Question-Answering" target="_blank">Hiển, Bách, Quyền</a>
+        2024-2025 PTIT | Made by <a href="https://github.com/GenHiegtion" target="_blank">Hiển, Bách, Quyền</a>
     </div>
     """,
     unsafe_allow_html=True
