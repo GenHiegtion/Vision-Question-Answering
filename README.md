@@ -1,7 +1,7 @@
 # 🤖 Vision Question Answering (VQA)
 
 This repository contains the source code and deployment for a **Vision Question Answering** system.  
-In this project, we focus specifically on **Yes/No questions**.
+In this project, I focus only on **Yes/No questions**.
 
 ---
 
